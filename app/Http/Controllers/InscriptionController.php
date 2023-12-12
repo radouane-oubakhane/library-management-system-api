@@ -13,7 +13,7 @@ class InscriptionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index():JsonResponse
+    public function index(): JsonResponse
     {
         try {
         $inscriptions = Inscription::all();
@@ -52,29 +52,60 @@ class InscriptionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
 
-            try {
-                $inscription = Inscription::create($request->all());
+        try {
+            $request->validate([
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'email' => 'required|email|unique:inscriptions',
+                'phone' => 'required|string',
+                'address' => 'required|string',
+                'date_of_birth' => 'required|date',
+                'password' => 'required|string',
+            ]);
 
-                return response()->json($inscription, 201);
+            $request->merge([
+                'status' => 'pending'
+            ]);
 
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'message' => 'Error while creating inscription',
-                    'error' => $th->getMessage()
-                ], 500);
-            }
+            $inscription = Inscription::create($request->all());
+
+            $inscriptionResponse = new InscriptionResponse(
+                $inscription->id,
+                $inscription->first_name,
+                $inscription->last_name,
+                $inscription->email,
+                $inscription->phone,
+                $inscription->address,
+                $inscription->date_of_birth,
+                $inscription->status
+            );
+
+            return response()->json($inscriptionResponse, 201);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while creating inscription',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
             $inscription = Inscription::find($id);
+
+            if (!$inscription) {
+                return response()->json([
+                    'message' => 'Inscription not found'
+                ], 404);
+            }
 
             $inscriptionResponse = new InscriptionResponse(
                 $inscription->id,
@@ -108,14 +139,44 @@ class InscriptionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): JsonResponse
     {
         try {
+
+            $request->validate([
+                'first_name' => 'sometimes|required|string',
+                'last_name' => 'sometimes|required|string',
+                'email' => 'sometimes|required|email|unique:inscriptions',
+                'phone' => 'sometimes|required|string',
+                'address' => 'sometimes|required|string',
+                'date_of_birth' => 'sometimes|required|date',
+                'status' => 'sometimes|required|string',
+                'password' => 'sometimes|required|string',
+            ]);
+
             $inscription = Inscription::find($id);
+
+
+            if (!$inscription) {
+                return response()->json([
+                    'message' => 'Inscription not found'
+                ], 404);
+            }
 
             $inscription->update($request->all());
 
-            return response()->json($inscription, 200);
+            $inscriptionResponse = new InscriptionResponse(
+                $inscription->id,
+                $inscription->first_name,
+                $inscription->last_name,
+                $inscription->email,
+                $inscription->phone,
+                $inscription->address,
+                $inscription->date_of_birth,
+                $inscription->status
+            );
+
+            return response()->json($inscriptionResponse, 200);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -128,14 +189,22 @@ class InscriptionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
-            Inscription::destroy($id);
+            $inscription = Inscription::find($id);
+
+            if (!$inscription) {
+                return response()->json([
+                    'message' => 'Inscription not found'
+                ], 404);
+            }
+
+            $inscription->delete();
 
             return response()->json([
                 'message' => 'Inscription deleted'
-            ], 200);
+            ], 204);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -151,16 +220,31 @@ class InscriptionController extends Controller
         try {
             $inscription = Inscription::find($id);
 
+            if (!$inscription) {
+                return response()->json([
+                    'message' => 'Inscription not found'
+                ], 404);
+            }
+
             $inscription->update([
                 'status' => 'accepted'
             ]);
 
-            $user = new RegisterController();
-            $user->create($inscription);
+            // $user = new RegisterController();
+            // $user->create($inscription);
 
-            return response()->json([
-                'message' => 'Inscription accepted'
-            ], 200);
+            $inscriptionResponse = new InscriptionResponse(
+                $inscription->id,
+                $inscription->first_name,
+                $inscription->last_name,
+                $inscription->email,
+                $inscription->phone,
+                $inscription->address,
+                $inscription->date_of_birth,
+                $inscription->status
+            );
+
+            return response()->json($inscriptionResponse, 200);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -175,13 +259,28 @@ class InscriptionController extends Controller
         try {
             $inscription = Inscription::find($id);
 
+            if (!$inscription) {
+                return response()->json([
+                    'message' => 'Inscription not found'
+                ], 404);
+            }
+
             $inscription->update([
                 'status' => 'rejected'
             ]);
 
-            return response()->json([
-                'message' => 'Inscription rejected'
-            ], 200);
+            $inscriptionResponse = new InscriptionResponse(
+                $inscription->id,
+                $inscription->first_name,
+                $inscription->last_name,
+                $inscription->email,
+                $inscription->phone,
+                $inscription->address,
+                $inscription->date_of_birth,
+                $inscription->status
+            );
+
+            return response()->json($inscriptionResponse, 200);
 
         } catch (\Throwable $th) {
             return response()->json([

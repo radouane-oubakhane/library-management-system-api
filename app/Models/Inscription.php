@@ -16,8 +16,10 @@ class Inscription extends Model
         'phone',
         'address',
         'date_of_birth',
-        'password',
-        'status'
+        'status',
+        'password'
     ];
+
+
 
 }

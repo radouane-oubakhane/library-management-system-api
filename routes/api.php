@@ -31,6 +31,7 @@ Route::prefix('inscriptions')->group(function () {
     Route::post('/', [InscriptionController::class, 'store'])->name('inscriptions.store');
     Route::put('/{id}', [InscriptionController::class, 'update'])->name('inscriptions.update');
     Route::delete('/{id}', [InscriptionController::class, 'destroy'])->name('inscriptions.destroy');
+
     Route::put('/{id}/accept', [InscriptionController::class, 'accept'])->name('inscriptions.accept');
     Route::put('/{id}/reject', [InscriptionController::class, 'reject'])->name('inscriptions.reject');
 });
@@ -86,5 +87,4 @@ Route::prefix('borrows')->group(function () {
 
     Route::put('/{id}/return', [BorrowController::class, 'return'])->name('borrows.return');
     Route::put('/{id}/overdue', [BorrowController::class, 'overdue'])->name('borrows.overdue');
-
 });

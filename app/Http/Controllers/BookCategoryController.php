@@ -50,7 +50,7 @@ class BookCategoryController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required'
+                'name' => 'required|string',
             ]);
 
 
