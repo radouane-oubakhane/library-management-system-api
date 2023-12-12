@@ -98,6 +98,12 @@ class AuthorController extends Controller
         try {
             $author = Author::find($id);
 
+            if (!$author) {
+                return response()->json([
+                    'message' => 'Author not found',
+                ], 404);
+            }
+
             $authorResponse = new AuthorResponse(
                 $author->id,
                 $author->first_name,
@@ -143,6 +149,13 @@ class AuthorController extends Controller
             ]);
 
             $author = Author::findOrFail($id);
+
+            if (!$author) {
+                return response()->json([
+                    'message' => 'Author not found',
+                ], 404);
+            }
+
             $author->update($request->all());
 
             $authorResponse = new AuthorResponse(
@@ -172,6 +185,13 @@ class AuthorController extends Controller
     {
         try {
             $author = Author::findOrFail($id);
+
+            if (!$author) {
+                return response()->json([
+                    'message' => 'Author not found',
+                ], 404);
+            }
+
             $books = $author->books;
 
             $books->map(function ($book) {
@@ -194,6 +214,14 @@ class AuthorController extends Controller
     {
         try {
             $author = Author::findOrFail($id);
+
+
+            if (!$author) {
+                return response()->json([
+                    'message' => 'Author not found',
+                ], 404);
+            }
+
 
             $books = $author->books->map(function ($book) {
                 return new AuthorBookResponse(

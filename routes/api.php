@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookCopyController;
 use App\Http\Controllers\InscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -62,4 +63,14 @@ Route::prefix('categories')->group(function () {
     Route::delete('/{id}', [BookCategoryController::class, 'destroy'])->name('book-categories.destroy');
 
     Route::get('/{id}/books', [BookCategoryController::class, 'books'])->name('book-categories.books');
+});
+
+Route::prefix('book-copies')->group(function () {
+    Route::get('/', [BookCopyController::class, 'index'])->name('book-copies.index');
+    Route::get('/{id}', [BookCopyController::class, 'show'])->name('book-copies.show');
+    Route::post('/', [BookCopyController::class, 'store'])->name('book-copies.store');
+    Route::put('/{id}', [BookCopyController::class, 'update'])->name('book-copies.update');
+    Route::delete('/{id}', [BookCopyController::class, 'destroy'])->name('book-copies.destroy');
+
+    Route::get('/{id}/borrows', [BookCopyController::class, 'borrows'])->name('book-copies.borrows');
 });

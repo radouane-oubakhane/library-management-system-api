@@ -81,6 +81,12 @@ class BookCategoryController extends Controller
         try {
             $category = BookCategory::findOrFail($id);
 
+            if (!$category) {
+                return response()->json([
+                    'message' => 'Category not found',
+                ], 404);
+            }
+
             $categoryResponse = new CategoryResponse(
                 $category->id,
                 $category->name,
@@ -116,6 +122,13 @@ class BookCategoryController extends Controller
             ]);
 
             $category = BookCategory::findOrFail($id);
+
+            if (!$category) {
+                return response()->json([
+                    'message' => 'Category not found',
+                ], 404);
+            }
+
             $category->update($request->all());
 
             $categoryResponse = new CategoryResponse(
@@ -140,6 +153,13 @@ class BookCategoryController extends Controller
     {
         try {
             $category = BookCategory::findOrFail($id);
+
+            if (!$category) {
+                return response()->json([
+                    'message' => 'Category not found',
+                ], 404);
+            }
+
             $category->delete();
 
             return response()->json(null, 204);
@@ -156,6 +176,13 @@ class BookCategoryController extends Controller
     {
         try {
             $category = BookCategory::findOrFail($id);
+
+            if (!$category) {
+                return response()->json([
+                    'message' => 'Category not found',
+                ], 404);
+            }
+
             $books = $category->books;
 
             $booksResponse = $books->map(function ($book) {

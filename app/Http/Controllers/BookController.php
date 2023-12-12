@@ -109,9 +109,42 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
-        //
+        try {
+            $book = Book::findOrFail($id);
+
+            if (!$book) {
+                return response()->json([
+                    'message' => 'Book not found',
+                ], 404);
+            }
+
+            $bookResponse = new BookResponse(
+                $book->id,
+                $book->title,
+                $book->author->first_name,
+                $book->author->last_name,
+                new BookCategoryResponse(
+                    $book->bookCategory->id,
+                    $book->bookCategory->name,),
+                $book->isbn,
+                $book->description,
+                $book->stock,
+                $book->publisher,
+                $book->published_at,
+                $book->language,
+                $book->edition,
+            );
+
+            return response()->json($bookResponse, 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while getting book',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -143,6 +176,13 @@ class BookController extends Controller
             ]);
 
             $book = Book::findOrFail($id);
+
+            if (!$book) {
+                return response()->json([
+                    'message' => 'Book not found',
+                ], 404);
+            }
+
             $book->update($request->all());
 
             $bookResponse = new BookResponse(
@@ -179,6 +219,12 @@ class BookController extends Controller
     {
         try {
             $book = Book::findOrFail($id);
+
+            if (!$book) {
+                return response()->json([
+                    'message' => 'Book not found',
+                ], 404);
+            }
 
 
             $book->bookCopies->map(function ($bookCopy) {
