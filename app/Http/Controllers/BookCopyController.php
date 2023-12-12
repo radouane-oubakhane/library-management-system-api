@@ -76,7 +76,9 @@ class BookCopyController extends Controller
                 'status' => 'required|string|in:available,borrowed',
             ]);
 
-            if (!Book::find($request->book_id)) {
+            $book = Book::find($request->book_id);
+
+            if (!$book) {
                 return response()->json([
                     'message' => 'Book not found',
                 ], 404);
@@ -87,6 +89,11 @@ class BookCopyController extends Controller
                 'book_id' => $request->book_id,
                 'status' => $request->status,
             ]);
+
+            // book stock is incremented by 1
+            $book->increment('stock');
+
+
 
             return response()->json($book_copy, 201);
 
@@ -228,7 +235,7 @@ class BookCopyController extends Controller
 
                 return response()->json([
                     'message' => 'Book copy deleted successfully',
-                ], 200);
+                ], 204);
 
             } catch (\Throwable $th) {
                 return response()->json([

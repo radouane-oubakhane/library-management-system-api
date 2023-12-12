@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookCopyController;
+use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\InscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -73,4 +74,17 @@ Route::prefix('book-copies')->group(function () {
     Route::delete('/{id}', [BookCopyController::class, 'destroy'])->name('book-copies.destroy');
 
     Route::get('/{id}/borrows', [BookCopyController::class, 'borrows'])->name('book-copies.borrows');
+});
+
+
+Route::prefix('borrows')->group(function () {
+    Route::get('/', [BorrowController::class, 'index'])->name('borrows.index');
+    Route::get('/{id}', [BorrowController::class, 'show'])->name('borrows.show');
+    Route::post('/', [BorrowController::class, 'store'])->name('borrows.store');
+    Route::put('/{id}', [BorrowController::class, 'update'])->name('borrows.update');
+    Route::delete('/{id}', [BorrowController::class, 'destroy'])->name('borrows.destroy');
+
+    Route::put('/{id}/return', [BorrowController::class, 'return'])->name('borrows.return');
+    Route::put('/{id}/overdue', [BorrowController::class, 'overdue'])->name('borrows.overdue');
+
 });
