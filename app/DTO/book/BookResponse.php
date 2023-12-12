@@ -1,6 +1,7 @@
 <?php
 
-namespace App\DTO;
+namespace App\DTO\book;
+
 
 class BookResponse
 {
@@ -9,7 +10,7 @@ class BookResponse
         public string $title,
         public string $author_first_name,
         public string $author_last_name,
-        public string $category_name,
+        public BookCategoryResponse $category,
         public string $isbn,
         public string $description,
         public int $stock,
@@ -17,6 +18,6 @@ class BookResponse
         public string $published_at,
         public string $language,
         public string $edition,
-    ) {
-    }
+    ) {}
 }
+
