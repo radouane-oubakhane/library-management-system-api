@@ -28,23 +28,6 @@ class AuthorController extends Controller
                     $author->phone,
                     $author->address,
                     $author->date_of_birth,
-                    $author->books->map(function ($book) {
-                        return new AuthorBookResponse(
-                            $book->id,
-                            $book->title,
-                            new AuthorCategoryResponse(
-                                $book->bookCategory->id,
-                                $book->bookCategory->name,),
-                            $book->isbn,
-                            $book->description,
-                            $book->stock,
-                            $book->publisher,
-                            $book->published_at,
-                            $book->language,
-                            $book->edition,
-                        );
-
-                    })->toArray()
                 );
             });
 
@@ -85,7 +68,19 @@ class AuthorController extends Controller
 
             $author = Author::create($request->all());
 
-            return response()->json($author, 201);
+            $authorResponse = new AuthorResponse(
+                $author->id,
+                $author->first_name,
+                $author->last_name,
+                $author->email,
+                $author->phone,
+                $author->address,
+                $author->date_of_birth,
+            );
+
+
+
+            return response()->json($authorResponse, 201);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -111,23 +106,6 @@ class AuthorController extends Controller
                 $author->phone,
                 $author->address,
                 $author->date_of_birth,
-                $author->books->map(function ($book) {
-                    return new AuthorBookResponse(
-                        $book->id,
-                        $book->title,
-                        new AuthorCategoryResponse(
-                            $book->bookCategory->id,
-                            $book->bookCategory->name,),
-                        $book->isbn,
-                        $book->description,
-                        $book->stock,
-                        $book->publisher,
-                        $book->published_at,
-                        $book->language,
-                        $book->edition,
-                    );
-
-                })->toArray()
             );
 
             return response()->json($authorResponse, 200);
@@ -167,7 +145,17 @@ class AuthorController extends Controller
             $author = Author::findOrFail($id);
             $author->update($request->all());
 
-            return response()->json($author, 200);
+            $authorResponse = new AuthorResponse(
+                $author->id,
+                $author->first_name,
+                $author->last_name,
+                $author->email,
+                $author->phone,
+                $author->address,
+                $author->date_of_birth,
+            );
+
+            return response()->json($authorResponse, 200);
 
         } catch (\Throwable $th) {
             return response()->json([

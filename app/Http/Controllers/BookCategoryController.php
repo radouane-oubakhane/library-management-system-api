@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\category\CategoryBookResponse;
 use App\DTO\category\CategoryResponse;
 use App\Models\BookCategory;
 use Illuminate\Http\JsonResponse;
@@ -39,25 +40,60 @@ class BookCategoryController extends Controller
      */
     public function create()
     {
-        return view('add-book-category');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request):JsonResponse
     {
-        BookCategory::create($request->all());
+        try {
+            $request->validate([
+                'name' => 'required'
+            ]);
 
-        return redirect()->route('book-categories.index');
+
+            $category = BookCategory::create($request->all());
+
+            $categoryResponse = new CategoryResponse(
+                $category->id,
+                $category->name,
+            );
+
+
+
+            return response()->json($categoryResponse, 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error while creating category',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id):JsonResponse
     {
-        //
+        try {
+            $category = BookCategory::findOrFail($id);
+
+            $categoryResponse = new CategoryResponse(
+                $category->id,
+                $category->name,
+            );
+
+            return response()->json($categoryResponse, 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error while fetching category',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -65,28 +101,85 @@ class BookCategoryController extends Controller
      */
     public function edit(string $id)
     {
-        return view('edit-category', [
-            'category' => BookCategory::findOrFail($id)
-        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id):JsonResponse
     {
-        $category = BookCategory::findOrFail($id);
-        $category->update($request->all());
-        return redirect()->route('book-categories.index');
+        try {
+
+            $request->validate([
+                'name' => 'sometimes|required|string',
+            ]);
+
+            $category = BookCategory::findOrFail($id);
+            $category->update($request->all());
+
+            $categoryResponse = new CategoryResponse(
+                $category->id,
+                $category->name,
+            );
+
+            return response()->json($categoryResponse, 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error while updating category',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id):JsonResponse
     {
-        $category = BookCategory::findOrFail($id);
-        $category->delete();
-        return redirect()->route('book-categories.index');
+        try {
+            $category = BookCategory::findOrFail($id);
+            $category->delete();
+
+            return response()->json(null, 204);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error while deleting category',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
+    public function books(string $id):JsonResponse
+    {
+        try {
+            $category = BookCategory::findOrFail($id);
+            $books = $category->books;
+
+            $booksResponse = $books->map(function ($book) {
+                return new CategoryBookResponse(
+                    $book->id,
+                    $book->title,
+                    $book->isbn,
+                    $book->description,
+                    $book->stock,
+                    $book->publisher,
+                    $book->published_at,
+                    $book->language,
+                    $book->edition,
+                );
+            })->toArray();
+
+            return response()->json($booksResponse, 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error while fetching books',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

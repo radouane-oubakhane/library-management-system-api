@@ -13,7 +13,6 @@ class AuthorResponse
         public string $phone,
         public string $address,
         public string $date_of_birth,
-        public array $books,
     ) {
     }
 }

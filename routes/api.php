@@ -60,4 +60,6 @@ Route::prefix('categories')->group(function () {
     Route::post('/', [BookCategoryController::class, 'store'])->name('book-categories.store');
     Route::put('/{id}', [BookCategoryController::class, 'update'])->name('book-categories.update');
     Route::delete('/{id}', [BookCategoryController::class, 'destroy'])->name('book-categories.destroy');
+
+    Route::get('/{id}/books', [BookCategoryController::class, 'books'])->name('book-categories.books');
 });

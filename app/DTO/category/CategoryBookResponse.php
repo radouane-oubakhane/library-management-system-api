@@ -1,15 +1,15 @@
 <?php
 
-namespace App\DTO\author;
+namespace App\DTO\category;
 
+use App\DTO\author\AuthorCategoryResponse;
 use App\DTO\category\CategoryResponse;
 
-class AuthorBookResponse
+class CategoryBookResponse
 {
     public function __construct(
         public int $id,
         public string $title,
-        public AuthorCategoryResponse $category,
         public string $isbn,
         public string $description,
         public int $stock,
