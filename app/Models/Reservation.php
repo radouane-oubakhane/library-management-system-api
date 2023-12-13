@@ -16,6 +16,7 @@ class Reservation extends Model
         'reserved_at',
         'canceled_at',
         'expired_at',
+        'status',
     ];
 
     public function book(): BelongsTo

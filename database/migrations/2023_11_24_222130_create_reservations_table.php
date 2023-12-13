@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('reserved_at');
             $table->date('canceled_at')->nullable();
             $table->date('expired_at')->nullable();
+            $table->enum('status', ['reserved', 'canceled', 'expired'])->default('reserved');
             $table->timestamps();
         });
     }

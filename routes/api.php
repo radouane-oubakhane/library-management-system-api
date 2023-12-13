@@ -7,6 +7,7 @@ use App\Http\Controllers\BookCopyController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\InscriptionController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -98,4 +99,16 @@ Route::prefix('members')->group(function () {
     Route::delete('/{id}', [MemberController::class, 'destroy'])->name('members.destroy');
 
     Route::get('/{id}/borrows', [MemberController::class, 'borrows'])->name('members.borrows');
+});
+
+
+Route::prefix('reservations')->group(function () {
+    Route::get('/', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/{id}', [ReservationController::class, 'show'])->name('reservations.show');
+    Route::post('/', [ReservationController::class, 'store'])->name('reservations.store');
+    Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
+    Route::delete('/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+
+    Route::put('/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
+    Route::put('/{id}/borrow', [ReservationController::class, 'borrow'])->name('reservations.borrow');
 });

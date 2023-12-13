@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\ReservationResponse;
+use App\DTO\borrow\BorrowCategoryResponse;
+use App\DTO\reservation\ReservationBookResponse;
+use App\DTO\reservation\ReservationMemberResponse;
+use App\DTO\reservation\ReservationResponse;
 use App\Models\Reservation;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -11,26 +15,57 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $reservations = Reservation::all();
+        try {
+            $reservations = Reservation::all();
 
-        $reservationResponse = $reservations->map(function ($reservation) {
-            return new ReservationResponse(
-                $reservation->id,
-                $reservation->book->title,
-                $reservation->book->isbn,
-                $reservation->member->first_name,
-                $reservation->member->last_name,
-                $reservation->reserved_at,
-                $reservation->canceled_at ?? '',
-                $reservation->expired_at,
-            );
-        });
+            $reservationsResponse = $reservations->map(function ($reservation) {
+                return new ReservationResponse(
+                    $reservation->id,
+                    new ReservationMemberResponse(
+                        $reservation->member->id,
+                        $reservation->member->first_name,
+                        $reservation->member->last_name,
+                        $reservation->member->email,
+                        $reservation->member->phone,
+                        $reservation->member->address,
+                        $reservation->member->date_of_birth,
+                        $reservation->member->membership_start_date,
+                        $reservation->member->membership_end_date,
+                    ),
+                    new ReservationBookResponse(
+                        $reservation->book->id,
+                        $reservation->book->title,
+                        $reservation->book->author->first_name,
+                        $reservation->book->author->last_name,
+                        new BorrowCategoryResponse(
+                            $reservation->book->bookCategory->id,
+                            $reservation->book->bookCategory->name,
+                        ),
+                        $reservation->book->isbn,
+                        $reservation->book->description,
+                        $reservation->book->stock,
+                        $reservation->book->publisher,
+                        $reservation->book->published_at,
+                        $reservation->book->language,
+                        $reservation->book->edition,
+                    ),
+                    $reservation->reserved_at,
+                    $reservation->canceled_at,
+                    $reservation->expired_at,
+                    $reservation->status
+                );
+            });
 
-        return view('reservations', [
-            'reservations' => $reservationResponse,
-        ]);
+            return response()->json($reservationsResponse, 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while getting reservations',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 
 
@@ -46,17 +81,127 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        //
+        try {
+            $request->validate([
+                'member_id' => 'required|integer',
+                'book_id' => 'required|integer',
+                'reserved_at' => 'required|date',
+                'canceled_at' => 'nullable|date',
+                'expired_at' => 'nullable|date',
+            ]);
+
+            $request->merge([
+                'status' => 'reserved'
+            ]);
+
+            $reservation = Reservation::create($request->all());
+
+            $reservationResponse = new ReservationResponse(
+                $reservation->id,
+                new ReservationMemberResponse(
+                    $reservation->member->id,
+                    $reservation->member->first_name,
+                    $reservation->member->last_name,
+                    $reservation->member->email,
+                    $reservation->member->phone,
+                    $reservation->member->address,
+                    $reservation->member->date_of_birth,
+                    $reservation->member->membership_start_date,
+                    $reservation->member->membership_end_date,
+                ),
+                new ReservationBookResponse(
+                    $reservation->book->id,
+                    $reservation->book->title,
+                    $reservation->book->author->first_name,
+                    $reservation->book->author->last_name,
+                    new BorrowCategoryResponse(
+                        $reservation->book->bookCategory->id,
+                        $reservation->book->bookCategory->name,
+                    ),
+                    $reservation->book->isbn,
+                    $reservation->book->description,
+                    $reservation->book->stock,
+                    $reservation->book->publisher,
+                    $reservation->book->published_at,
+                    $reservation->book->language,
+                    $reservation->book->edition,
+                ),
+                $reservation->reserved_at,
+                $reservation->canceled_at,
+                $reservation->expired_at,
+                $reservation->status
+            );
+
+            return response()->json($reservationResponse, 201);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while creating reservation',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
-        //
+        try {
+            $reservation = Reservation::find($id);
+
+            if (!$reservation) {
+                return response()->json([
+                    'message' => 'Reservation not found'
+                ], 404);
+            }
+
+            $reservationResponse = new ReservationResponse(
+                $reservation->id,
+                new ReservationMemberResponse(
+                    $reservation->member->id,
+                    $reservation->member->first_name,
+                    $reservation->member->last_name,
+                    $reservation->member->email,
+                    $reservation->member->phone,
+                    $reservation->member->address,
+                    $reservation->member->date_of_birth,
+                    $reservation->member->membership_start_date,
+                    $reservation->member->membership_end_date,
+                ),
+                new ReservationBookResponse(
+                    $reservation->book->id,
+                    $reservation->book->title,
+                    $reservation->book->author->first_name,
+                    $reservation->book->author->last_name,
+                    new BorrowCategoryResponse(
+                        $reservation->book->bookCategory->id,
+                        $reservation->book->bookCategory->name,
+                    ),
+                    $reservation->book->isbn,
+                    $reservation->book->description,
+                    $reservation->book->stock,
+                    $reservation->book->publisher,
+                    $reservation->book->published_at,
+                    $reservation->book->language,
+                    $reservation->book->edition,
+                ),
+                $reservation->reserved_at,
+                $reservation->canceled_at,
+                $reservation->expired_at,
+                $reservation->status
+            );
+
+            return response()->json($reservationResponse, 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while getting reservation',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -70,9 +215,71 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): JsonResponse
     {
-        //
+        try {
+            $reservation = Reservation::find($id);
+
+            if (!$reservation) {
+                return response()->json([
+                    'message' => 'Reservation not found'
+                ], 404);
+            }
+
+            $request->validate([
+                'member_id' => 'sometimes|required|integer',
+                'book_id' => 'sometimes|required|integer',
+                'reserved_at' => 'sometimes|required|date',
+                'canceled_at' => 'sometimes|nullable|date',
+                'expired_at' => 'sometimes|nullable|date',
+            ]);
+
+            $reservation->update($request->all());
+
+            $reservationResponse = new ReservationResponse(
+                $reservation->id,
+                new ReservationMemberResponse(
+                    $reservation->member->id,
+                    $reservation->member->first_name,
+                    $reservation->member->last_name,
+                    $reservation->member->email,
+                    $reservation->member->phone,
+                    $reservation->member->address,
+                    $reservation->member->date_of_birth,
+                    $reservation->member->membership_start_date,
+                    $reservation->member->membership_end_date,
+                ),
+                new ReservationBookResponse(
+                    $reservation->book->id,
+                    $reservation->book->title,
+                    $reservation->book->author->first_name,
+                    $reservation->book->author->last_name,
+                    new BorrowCategoryResponse(
+                        $reservation->book->bookCategory->id,
+                        $reservation->book->bookCategory->name,
+                    ),
+                    $reservation->book->isbn,
+                    $reservation->book->description,
+                    $reservation->book->stock,
+                    $reservation->book->publisher,
+                    $reservation->book->published_at,
+                    $reservation->book->language,
+                    $reservation->book->edition,
+                ),
+                $reservation->reserved_at,
+                $reservation->canceled_at,
+                $reservation->expired_at,
+                $reservation->status
+            );
+
+            return response()->json($reservationResponse, 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while updating reservation',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -80,8 +287,26 @@ class ReservationController extends Controller
      */
     public function destroy(string $id)
     {
-        $reservation = Reservation::findOrFail($id);
-        $reservation->delete();
-        return redirect()->route('reservations.index');
+        try {
+            $reservation = Reservation::find($id);
+
+            if (!$reservation) {
+                return response()->json([
+                    'message' => 'Reservation not found'
+                ], 404);
+            }
+
+            $reservation->delete();
+
+            return response()->json([
+                'message' => 'Reservation deleted'
+            ], 204);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while deleting reservation',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 }
