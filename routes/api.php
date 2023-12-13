@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookCopyController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\InscriptionController;
+use App\Http\Controllers\MemberController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -87,4 +88,14 @@ Route::prefix('borrows')->group(function () {
 
     Route::put('/{id}/return', [BorrowController::class, 'return'])->name('borrows.return');
     Route::put('/{id}/overdue', [BorrowController::class, 'overdue'])->name('borrows.overdue');
+});
+
+Route::prefix('members')->group(function () {
+    Route::get('/', [MemberController::class, 'index'])->name('members.index');
+    Route::get('/{id}', [MemberController::class, 'show'])->name('members.show');
+    Route::post('/', [MemberController::class, 'store'])->name('members.store');
+    Route::put('/{id}', [MemberController::class, 'update'])->name('members.update');
+    Route::delete('/{id}', [MemberController::class, 'destroy'])->name('members.destroy');
+
+    Route::get('/{id}/borrows', [MemberController::class, 'borrows'])->name('members.borrows');
 });
