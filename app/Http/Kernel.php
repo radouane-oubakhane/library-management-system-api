@@ -43,8 +43,16 @@ class Kernel extends HttpKernel
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'is_admin' => \App\Http\Middleware\IsAdmin::class,
         ],
     ];
+
+
+    protected $routeMiddleware = [
+        // ...
+        'is_admin' => \App\Http\Middleware\IsAdmin::class,
+    ];
+
 
     /**
      * The application's middleware aliases.

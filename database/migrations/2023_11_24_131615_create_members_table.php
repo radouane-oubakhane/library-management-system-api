@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('date_of_birth');
             $table->string('membership_start_date');
             $table->string('membership_end_date');
+            $table->string('picture')->nullable();
             $table->timestamps();
         });
     }

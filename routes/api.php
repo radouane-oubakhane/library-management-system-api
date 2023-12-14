@@ -28,24 +28,31 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+
+
+
+// =========================================== Public routes ===========================================
+
 // login and register routes
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 
-// Public routes
 Route::prefix('inscriptions')->group(function () {
     Route::post('/', [InscriptionController::class, 'store'])->name('inscriptions.store');
 });
+
 
 Route::prefix('books')->group(function () {
     Route::get('/', [BookController::class, 'index'])->name('books.index');
     Route::get('/{id}', [BookController::class, 'show'])->name('books.show');
 });
 
+
 Route::prefix('authors')->group(function () {
     Route::get('/', [AuthorController::class, 'index'])->name('authors.index');
     Route::get('/{id}', [AuthorController::class, 'show'])->name('authors.show');
+    Route::get('/{id}/books', [AuthorController::class, 'books'])->name('authors.books');
 });
 
 
@@ -55,16 +62,13 @@ Route::prefix('categories')->group(function () {
 });
 
 
-// Protected routes
+// =========================================== Protected routes ===========================================
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+// Admin routes
+Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
 
+    // Inscriptions routes
     Route::prefix('inscriptions')->group(function () {
         Route::get('/', [InscriptionController::class, 'index'])->name('inscriptions.index');
         Route::get('/{id}', [InscriptionController::class, 'show'])->name('inscriptions.show');
@@ -76,7 +80,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{id}/reject', [InscriptionController::class, 'reject'])->name('inscriptions.reject');
     });
 
-
+    // Books routes
     Route::prefix('books')->group(function () {
         // Route::get('/', [BookController::class, 'index'])->name('books.index');
         // Route::get('/{id}', [BookController::class, 'show'])->name('books.show');
@@ -85,7 +89,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/{id}', [BookController::class, 'destroy'])->name('books.destroy');
     });
 
-
+    // Authors routes
     Route::prefix('authors')->group(function () {
         // Route::get('/', [AuthorController::class, 'index'])->name('authors.index');
         // Route::get('/{id}', [AuthorController::class, 'show'])->name('authors.show');
@@ -93,10 +97,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{id}', [AuthorController::class, 'update'])->name('authors.update');
         Route::delete('/{id}', [AuthorController::class, 'destroy'])->name('authors.destroy');
 
-        Route::get('/{id}/books', [AuthorController::class, 'books'])->name('authors.books');
+        // Route::get('/{id}/books', [AuthorController::class, 'books'])->name('authors.books');
     });
 
-
+    // Book categories routes
     Route::prefix('categories')->group(function () {
         // Route::get('/', [BookCategoryController::class, 'index'])->name('book-categories.index');
         // Route::get('/{id}', [BookCategoryController::class, 'show'])->name('book-categories.show');
@@ -104,9 +108,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{id}', [BookCategoryController::class, 'update'])->name('book-categories.update');
         Route::delete('/{id}', [BookCategoryController::class, 'destroy'])->name('book-categories.destroy');
 
-        Route::get('/{id}/books', [BookCategoryController::class, 'books'])->name('book-categories.books');
+        // Route::get('/{id}/books', [BookCategoryController::class, 'books'])->name('book-categories.books');
     });
 
+    // Book copies routes
     Route::prefix('book-copies')->group(function () {
         Route::get('/', [BookCopyController::class, 'index'])->name('book-copies.index');
         Route::get('/{id}', [BookCopyController::class, 'show'])->name('book-copies.show');
@@ -117,7 +122,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}/borrows', [BookCopyController::class, 'borrows'])->name('book-copies.borrows');
     });
 
-
+    // Borrows routes
     Route::prefix('borrows')->group(function () {
         Route::get('/', [BorrowController::class, 'index'])->name('borrows.index');
         Route::get('/{id}', [BorrowController::class, 'show'])->name('borrows.show');
@@ -129,6 +134,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{id}/overdue', [BorrowController::class, 'overdue'])->name('borrows.overdue');
     });
 
+    // Member routes
     Route::prefix('members')->group(function () {
         Route::get('/', [MemberController::class, 'index'])->name('members.index');
         Route::get('/{id}', [MemberController::class, 'show'])->name('members.show');
@@ -139,7 +145,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}/borrows', [MemberController::class, 'borrows'])->name('members.borrows');
     });
 
-
+    // Reservations routes
     Route::prefix('reservations')->group(function () {
         Route::get('/', [ReservationController::class, 'index'])->name('reservations.index');
         Route::get('/{id}', [ReservationController::class, 'show'])->name('reservations.show');
@@ -150,6 +156,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
         Route::put('/{id}/borrow', [ReservationController::class, 'borrow'])->name('reservations.borrow');
     });
+
+});
+
+// Member routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // Auth routes
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
+
+
+
 });
 
 

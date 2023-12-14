@@ -17,6 +17,7 @@ class BorrowBookResponse
         public string                   $published_at,
         public string                   $language,
         public string                   $edition,
+        public string                   $picture,
     ) {}
 
 }

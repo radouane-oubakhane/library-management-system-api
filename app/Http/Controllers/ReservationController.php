@@ -33,6 +33,7 @@ class ReservationController extends Controller
                         $reservation->member->date_of_birth,
                         $reservation->member->membership_start_date,
                         $reservation->member->membership_end_date,
+                        $reservation->member->picture,
                     ),
                     new ReservationBookResponse(
                         $reservation->book->id,
@@ -42,6 +43,7 @@ class ReservationController extends Controller
                         new BorrowCategoryResponse(
                             $reservation->book->bookCategory->id,
                             $reservation->book->bookCategory->name,
+                            $reservation->book->bookCategory->description,
                         ),
                         $reservation->book->isbn,
                         $reservation->book->description,
@@ -50,6 +52,7 @@ class ReservationController extends Controller
                         $reservation->book->published_at,
                         $reservation->book->language,
                         $reservation->book->edition,
+                        $reservation->book->picture,
                     ),
                     $reservation->reserved_at,
                     $reservation->canceled_at,
@@ -110,6 +113,7 @@ class ReservationController extends Controller
                     $reservation->member->date_of_birth,
                     $reservation->member->membership_start_date,
                     $reservation->member->membership_end_date,
+                    $reservation->member->picture,
                 ),
                 new ReservationBookResponse(
                     $reservation->book->id,
@@ -119,6 +123,7 @@ class ReservationController extends Controller
                     new BorrowCategoryResponse(
                         $reservation->book->bookCategory->id,
                         $reservation->book->bookCategory->name,
+                        $reservation->book->bookCategory->description,
                     ),
                     $reservation->book->isbn,
                     $reservation->book->description,
@@ -127,6 +132,7 @@ class ReservationController extends Controller
                     $reservation->book->published_at,
                     $reservation->book->language,
                     $reservation->book->edition,
+                    $reservation->book->picture,
                 ),
                 $reservation->reserved_at,
                 $reservation->canceled_at,
@@ -170,6 +176,7 @@ class ReservationController extends Controller
                     $reservation->member->date_of_birth,
                     $reservation->member->membership_start_date,
                     $reservation->member->membership_end_date,
+                    $reservation->member->picture,
                 ),
                 new ReservationBookResponse(
                     $reservation->book->id,
@@ -179,6 +186,7 @@ class ReservationController extends Controller
                     new BorrowCategoryResponse(
                         $reservation->book->bookCategory->id,
                         $reservation->book->bookCategory->name,
+                        $reservation->book->bookCategory->description,
                     ),
                     $reservation->book->isbn,
                     $reservation->book->description,
@@ -187,6 +195,7 @@ class ReservationController extends Controller
                     $reservation->book->published_at,
                     $reservation->book->language,
                     $reservation->book->edition,
+                    $reservation->book->picture,
                 ),
                 $reservation->reserved_at,
                 $reservation->canceled_at,
@@ -248,6 +257,7 @@ class ReservationController extends Controller
                     $reservation->member->date_of_birth,
                     $reservation->member->membership_start_date,
                     $reservation->member->membership_end_date,
+                    $reservation->member->picture,
                 ),
                 new ReservationBookResponse(
                     $reservation->book->id,
@@ -257,6 +267,7 @@ class ReservationController extends Controller
                     new BorrowCategoryResponse(
                         $reservation->book->bookCategory->id,
                         $reservation->book->bookCategory->name,
+                        $reservation->book->bookCategory->description,
                     ),
                     $reservation->book->isbn,
                     $reservation->book->description,
@@ -265,6 +276,7 @@ class ReservationController extends Controller
                     $reservation->book->published_at,
                     $reservation->book->language,
                     $reservation->book->edition,
+                    $reservation->book->picture,
                 ),
                 $reservation->reserved_at,
                 $reservation->canceled_at,
@@ -338,6 +350,7 @@ class ReservationController extends Controller
                     $reservation->member->date_of_birth,
                     $reservation->member->membership_start_date,
                     $reservation->member->membership_end_date,
+                    $reservation->member->picture,
                 ),
                 new ReservationBookResponse(
                     $reservation->book->id,
@@ -347,6 +360,7 @@ class ReservationController extends Controller
                     new BorrowCategoryResponse(
                         $reservation->book->bookCategory->id,
                         $reservation->book->bookCategory->name,
+                        $reservation->book->bookCategory->description,
                     ),
                     $reservation->book->isbn,
                     $reservation->book->description,
@@ -355,6 +369,7 @@ class ReservationController extends Controller
                     $reservation->book->published_at,
                     $reservation->book->language,
                     $reservation->book->edition,
+                    $reservation->book->picture,
                 ),
                 $reservation->reserved_at,
                 $reservation->canceled_at,
@@ -400,6 +415,7 @@ class ReservationController extends Controller
                     $reservation->member->date_of_birth,
                     $reservation->member->membership_start_date,
                     $reservation->member->membership_end_date,
+                    $reservation->member->picture,
                 ),
                 new ReservationBookResponse(
                     $reservation->book->id,
@@ -409,6 +425,7 @@ class ReservationController extends Controller
                     new BorrowCategoryResponse(
                         $reservation->book->bookCategory->id,
                         $reservation->book->bookCategory->name,
+                        $reservation->book->bookCategory->description,
                     ),
                     $reservation->book->isbn,
                     $reservation->book->description,
@@ -417,6 +434,7 @@ class ReservationController extends Controller
                     $reservation->book->published_at,
                     $reservation->book->language,
                     $reservation->book->edition,
+                    $reservation->book->picture,
                 ),
                 $reservation->reserved_at,
                 $reservation->canceled_at,

@@ -22,6 +22,7 @@ class Book extends Model
         'published_at',
         'language',
         'edition',
+        'picture',
     ];
 
     public function author(): BelongsTo

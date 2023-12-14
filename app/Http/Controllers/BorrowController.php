@@ -34,6 +34,7 @@ class BorrowController extends Controller
                         new BorrowCategoryResponse(
                             $borrow->book->bookCategory->id,
                             $borrow->book->bookCategory->name,
+                            $borrow->book->bookCategory->description,
                         ),
                         $borrow->book->isbn,
                         $borrow->book->description,
@@ -42,6 +43,7 @@ class BorrowController extends Controller
                         $borrow->book->published_at,
                         $borrow->book->language,
                         $borrow->book->edition,
+                        $borrow->book->picture,
                     ),
                     $borrow->book_copy_id,
                     new BorrowMemberResponse(
@@ -54,6 +56,7 @@ class BorrowController extends Controller
                         $borrow->member->date_of_birth,
                         $borrow->member->membership_start_date,
                         $borrow->member->membership_end_date,
+                        $borrow->member->picture,
                     ),
                     $borrow->borrow_date,
                     $borrow->return_date,
@@ -145,6 +148,8 @@ class BorrowController extends Controller
                     new BorrowCategoryResponse(
                         $borrow->book->bookCategory->id,
                         $borrow->book->bookCategory->name,
+                        $borrow->book->bookCategory->description,
+
                     ),
                     $borrow->book->isbn,
                     $borrow->book->description,
@@ -153,6 +158,7 @@ class BorrowController extends Controller
                     $borrow->book->published_at,
                     $borrow->book->language,
                     $borrow->book->edition,
+                    $borrow->book->picture,
                 ),
                 $borrow->book_copy_id,
                 new BorrowMemberResponse(
@@ -165,6 +171,7 @@ class BorrowController extends Controller
                     $borrow->member->date_of_birth,
                     $borrow->member->membership_start_date,
                     $borrow->member->membership_end_date,
+                    $borrow->member->picture,
                 ),
                 $borrow->borrow_date,
                 $borrow->return_date,
@@ -206,6 +213,7 @@ class BorrowController extends Controller
                     new BorrowCategoryResponse(
                         $borrow->book->bookCategory->id,
                         $borrow->book->bookCategory->name,
+                        $borrow->book->bookCategory->description,
                     ),
                     $borrow->book->isbn,
                     $borrow->book->description,
@@ -214,6 +222,7 @@ class BorrowController extends Controller
                     $borrow->book->published_at,
                     $borrow->book->language,
                     $borrow->book->edition,
+                    $borrow->book->picture,
                 ),
                 $borrow->book_copy_id,
                 new BorrowMemberResponse(
@@ -226,6 +235,7 @@ class BorrowController extends Controller
                     $borrow->member->date_of_birth,
                     $borrow->member->membership_start_date,
                     $borrow->member->membership_end_date,
+                    $borrow->member->picture,
                 ),
                 $borrow->borrow_date,
                 $borrow->return_date,
@@ -301,6 +311,7 @@ class BorrowController extends Controller
                     new BorrowCategoryResponse(
                         $borrow->book->bookCategory->id,
                         $borrow->book->bookCategory->name,
+                        $borrow->book->bookCategory->description,
                     ),
                     $borrow->book->isbn,
                     $borrow->book->description,
@@ -309,6 +320,7 @@ class BorrowController extends Controller
                     $borrow->book->published_at,
                     $borrow->book->language,
                     $borrow->book->edition,
+                    $borrow->book->picture,
                 ),
                 $borrow->book_copy_id,
                 new BorrowMemberResponse(
@@ -321,6 +333,7 @@ class BorrowController extends Controller
                     $borrow->member->date_of_birth,
                     $borrow->member->membership_start_date,
                     $borrow->member->membership_end_date,
+                    $borrow->member->picture,
                 ),
                 $borrow->borrow_date,
                 $borrow->return_date,
@@ -390,6 +403,7 @@ class BorrowController extends Controller
                         new BorrowCategoryResponse(
                             $borrow->book->bookCategory->id,
                             $borrow->book->bookCategory->name,
+                            $borrow->book->bookCategory->description,
                         ),
                         $borrow->book->isbn,
                         $borrow->book->description,
@@ -398,6 +412,7 @@ class BorrowController extends Controller
                         $borrow->book->published_at,
                         $borrow->book->language,
                         $borrow->book->edition,
+                        $borrow->book->picture,
                     ),
                     $borrow->book_copy_id,
                     new BorrowMemberResponse(
@@ -410,6 +425,7 @@ class BorrowController extends Controller
                         $borrow->member->date_of_birth,
                         $borrow->member->membership_start_date,
                         $borrow->member->membership_end_date,
+                        $borrow->member->picture,
                     ),
                     $borrow->borrow_date,
                     $borrow->return_date,
@@ -452,6 +468,7 @@ class BorrowController extends Controller
                             new BorrowCategoryResponse(
                                 $borrow->book->bookCategory->id,
                                 $borrow->book->bookCategory->name,
+                                $borrow->book->bookCategory->description,
                             ),
                             $borrow->book->isbn,
                             $borrow->book->description,
@@ -460,6 +477,7 @@ class BorrowController extends Controller
                             $borrow->book->published_at,
                             $borrow->book->language,
                             $borrow->book->edition,
+                            $borrow->book->picture,
                         ),
                         $borrow->book_copy_id,
                         new BorrowMemberResponse(
@@ -472,6 +490,7 @@ class BorrowController extends Controller
                             $borrow->member->date_of_birth,
                             $borrow->member->membership_start_date,
                             $borrow->member->membership_end_date,
+                            $borrow->member->picture,
                         ),
                         $borrow->borrow_date,
                         $borrow->return_date,

@@ -38,6 +38,7 @@ class MemberController extends Controller
                    $member->date_of_birth,
                    $member->membership_start_date,
                    $member->membership_end_date,
+                   $member->user->picture,
                );
            });
 
@@ -98,6 +99,7 @@ class MemberController extends Controller
                 $member->date_of_birth,
                 $member->membership_start_date,
                 $member->membership_end_date,
+                $member->picture,
             );
 
             return response()->json($memberResponse, 201);
@@ -135,6 +137,7 @@ class MemberController extends Controller
                 $member->date_of_birth,
                 $member->membership_start_date,
                 $member->membership_end_date,
+                $member->picture,
             );
 
             return response()->json($memberResponse, 200);
@@ -194,6 +197,7 @@ class MemberController extends Controller
                 $member->date_of_birth,
                 $member->membership_start_date,
                 $member->membership_end_date,
+                $member->picture,
             );
 
             return response()->json($memberResponse, 200);

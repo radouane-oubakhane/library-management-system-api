@@ -22,6 +22,7 @@ class BookCategoryController extends Controller
                 return new CategoryResponse(
                     $category->id,
                     $category->name,
+                    $category->description,
                 );
             })->toArray();
 
@@ -59,6 +60,7 @@ class BookCategoryController extends Controller
             $categoryResponse = new CategoryResponse(
                 $category->id,
                 $category->name,
+                $category->description,
             );
 
 
@@ -90,6 +92,7 @@ class BookCategoryController extends Controller
             $categoryResponse = new CategoryResponse(
                 $category->id,
                 $category->name,
+                $category->description,
             );
 
             return response()->json($categoryResponse, 200);
@@ -134,6 +137,7 @@ class BookCategoryController extends Controller
             $categoryResponse = new CategoryResponse(
                 $category->id,
                 $category->name,
+                $category->description,
             );
 
             return response()->json($categoryResponse, 200);
@@ -196,6 +200,7 @@ class BookCategoryController extends Controller
                     $book->published_at,
                     $book->language,
                     $book->edition,
+                    $book->picture,
                 );
             })->toArray();
 

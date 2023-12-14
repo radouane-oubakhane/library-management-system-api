@@ -29,6 +29,7 @@ class BookFactory extends Factory
             'published_at' => $this->faker->date,
             'language' => $this->faker->languageCode,
             'edition' => $this->faker->numberBetween(1, 10),
+            'picture' => $this->faker->imageUrl(),
         ];
     }
 }

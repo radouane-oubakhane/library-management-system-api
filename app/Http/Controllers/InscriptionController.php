@@ -27,7 +27,8 @@ class InscriptionController extends Controller
                 $inscription->phone,
                 $inscription->address,
                 $inscription->date_of_birth,
-                $inscription->status
+                $inscription->status,
+                $inscription->picture,
             );
         });
 
@@ -80,7 +81,8 @@ class InscriptionController extends Controller
                 $inscription->phone,
                 $inscription->address,
                 $inscription->date_of_birth,
-                $inscription->status
+                $inscription->status,
+                $inscription->picture,
             );
 
             return response()->json($inscriptionResponse, 201);
@@ -115,7 +117,8 @@ class InscriptionController extends Controller
                 $inscription->phone,
                 $inscription->address,
                 $inscription->date_of_birth,
-                $inscription->status
+                $inscription->status,
+                $inscription->picture,
             );
 
             return response()->json($inscriptionResponse, 200);
@@ -173,7 +176,8 @@ class InscriptionController extends Controller
                 $inscription->phone,
                 $inscription->address,
                 $inscription->date_of_birth,
-                $inscription->status
+                $inscription->status,
+                $inscription->picture,
             );
 
             return response()->json($inscriptionResponse, 200);
@@ -241,7 +245,8 @@ class InscriptionController extends Controller
                 $inscription->phone,
                 $inscription->address,
                 $inscription->date_of_birth,
-                $inscription->status
+                $inscription->status,
+                $inscription->picture,
             );
 
             return response()->json($inscriptionResponse, 200);
@@ -277,7 +282,8 @@ class InscriptionController extends Controller
                 $inscription->phone,
                 $inscription->address,
                 $inscription->date_of_birth,
-                $inscription->status
+                $inscription->status,
+                $inscription->picture,
             );
 
             return response()->json($inscriptionResponse, 200);

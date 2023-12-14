@@ -32,6 +32,7 @@ class BookCopyController extends Controller
                         new BookCopyCategoryResponse(
                             $book_copy->book->bookCategory->id,
                             $book_copy->book->bookCategory->name,
+                            $book_copy->book->bookCategory->description,
                         ),
                         $book_copy->book->isbn,
                         $book_copy->book->description,
@@ -40,6 +41,7 @@ class BookCopyController extends Controller
                         $book_copy->book->published_at,
                         $book_copy->book->language,
                         $book_copy->book->edition,
+                        $book_copy->book->picture,
                     ),
                     $book_copy->status,
                 );
@@ -131,6 +133,7 @@ class BookCopyController extends Controller
                     new BookCopyCategoryResponse(
                         $book_copy->book->bookCategory->id,
                         $book_copy->book->bookCategory->name,
+                        $book_copy->book->bookCategory->description,
                     ),
                     $book_copy->book->isbn,
                     $book_copy->book->description,
@@ -139,6 +142,7 @@ class BookCopyController extends Controller
                     $book_copy->book->published_at,
                     $book_copy->book->language,
                     $book_copy->book->edition,
+                    $book_copy->book->picture,
                 ),
                 $book_copy->status,
             );
@@ -194,6 +198,7 @@ class BookCopyController extends Controller
                     new BookCopyCategoryResponse(
                         $book_copy->book->bookCategory->id,
                         $book_copy->book->bookCategory->name,
+                        $book_copy->book->bookCategory->description,
                     ),
                     $book_copy->book->isbn,
                     $book_copy->book->description,
@@ -202,6 +207,7 @@ class BookCopyController extends Controller
                     $book_copy->book->published_at,
                     $book_copy->book->language,
                     $book_copy->book->edition,
+                    $book_copy->book->picture,
                 ),
                 $book_copy->status,
             );

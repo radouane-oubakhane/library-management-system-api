@@ -14,6 +14,7 @@ class ReservationMemberResponse
         public string $date_of_birth,
         public string $membership_start_date,
         public string $membership_end_date,
+        public string $picture,
     ) {
     }
 }

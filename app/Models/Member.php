@@ -21,6 +21,7 @@ class Member extends Model
         'date_of_birth',
         'membership_start_date',
         'membership_end_date',
+        'picture'
     ];
 
     public function borrows(): HasMany

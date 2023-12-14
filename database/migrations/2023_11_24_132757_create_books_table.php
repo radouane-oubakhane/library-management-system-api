@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('published_at')->nullable();
             $table->string('language')->nullable();
             $table->string('edition')->nullable();
+            $table->string('picture')->nullable();
             $table->timestamps();
         });
     }

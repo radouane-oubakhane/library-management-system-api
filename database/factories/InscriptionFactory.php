@@ -24,6 +24,8 @@ class InscriptionFactory extends Factory
             'address' => $this->faker->address(),
             'date_of_birth' => $this->faker->date(),
             'password' => $this->faker->password(),
+            'status' => $this->faker->randomElement(['accepted', 'pending', 'rejected']),
+            'picture' => $this->faker->imageUrl(),
         ];
     }
 }

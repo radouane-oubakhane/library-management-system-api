@@ -13,6 +13,7 @@ class InscriptionRequest
         public string $date_of_birth,
         public string $status,
         public string $password,
+        public string $picture,
     ) {
     }
 

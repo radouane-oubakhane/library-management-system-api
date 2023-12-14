@@ -12,7 +12,8 @@ class InscriptionResponse
         public string $phone,
         public string $address,
         public string $date_of_birth,
-        public string $status
+        public string $status,
+        public string $picture,
     ) {
     }
 

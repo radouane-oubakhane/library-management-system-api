@@ -26,7 +26,8 @@ class BookController extends Controller
                     $book->author->last_name,
                     new BookCategoryResponse(
                         $book->bookCategory->id,
-                        $book->bookCategory->name,),
+                        $book->bookCategory->name,
+                        $book->bookCategory->description,),
                     $book->isbn,
                     $book->description,
                     $book->stock,
@@ -34,6 +35,7 @@ class BookController extends Controller
                     $book->published_at,
                     $book->language,
                     $book->edition,
+                    $book->picture,
                 );
             });
 
@@ -86,7 +88,8 @@ class BookController extends Controller
                 $book->author->last_name,
                 new BookCategoryResponse(
                     $book->bookCategory->id,
-                    $book->bookCategory->name,),
+                    $book->bookCategory->name,
+                    $book->bookCategory->description,),
                 $book->isbn,
                 $book->description,
                 $book->stock,
@@ -94,6 +97,7 @@ class BookController extends Controller
                 $book->published_at,
                 $book->language,
                 $book->edition,
+                $book->picture,
             );
 
             return response()->json($bookResponse, 201);
@@ -127,7 +131,8 @@ class BookController extends Controller
                 $book->author->last_name,
                 new BookCategoryResponse(
                     $book->bookCategory->id,
-                    $book->bookCategory->name,),
+                    $book->bookCategory->name,
+                    $book->bookCategory->description,),
                 $book->isbn,
                 $book->description,
                 $book->stock,
@@ -135,6 +140,7 @@ class BookController extends Controller
                 $book->published_at,
                 $book->language,
                 $book->edition,
+                $book->picture,
             );
 
             return response()->json($bookResponse, 200);
@@ -192,7 +198,8 @@ class BookController extends Controller
                 $book->author->last_name,
                 new BookCategoryResponse(
                     $book->bookCategory->id,
-                    $book->bookCategory->name,),
+                    $book->bookCategory->name,
+                    $book->bookCategory->description,),
                 $book->isbn,
                 $book->description,
                 $book->stock,
@@ -200,6 +207,7 @@ class BookController extends Controller
                 $book->published_at,
                 $book->language,
                 $book->edition,
+                $book->picture,
             );
 
             return response()->json($bookResponse, 200);

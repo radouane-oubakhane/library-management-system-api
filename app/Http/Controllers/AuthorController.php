@@ -28,6 +28,7 @@ class AuthorController extends Controller
                     $author->phone,
                     $author->address,
                     $author->date_of_birth,
+                    $author->picture,
                 );
             });
 
@@ -76,6 +77,7 @@ class AuthorController extends Controller
                 $author->phone,
                 $author->address,
                 $author->date_of_birth,
+                $author->picture,
             );
 
 
@@ -112,6 +114,7 @@ class AuthorController extends Controller
                 $author->phone,
                 $author->address,
                 $author->date_of_birth,
+                $author->picture,
             );
 
             return response()->json($authorResponse, 200);
@@ -166,6 +169,7 @@ class AuthorController extends Controller
                 $author->phone,
                 $author->address,
                 $author->date_of_birth,
+                $author->picture,
             );
 
             return response()->json($authorResponse, 200);
@@ -229,7 +233,8 @@ class AuthorController extends Controller
                     $book->title,
                     new AuthorCategoryResponse(
                         $book->bookCategory->id,
-                        $book->bookCategory->name,),
+                        $book->bookCategory->name,
+                        $book->bookCategory->description,),
                     $book->isbn,
                     $book->description,
                     $book->stock,
@@ -237,6 +242,7 @@ class AuthorController extends Controller
                     $book->published_at,
                     $book->language,
                     $book->edition,
+                    $book->picture,
                 );
 
             });

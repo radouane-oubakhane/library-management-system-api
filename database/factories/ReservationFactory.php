@@ -24,6 +24,7 @@ class ReservationFactory extends Factory
             'reserved_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'canceled_at' => $this->faker->optional()->dateTimeBetween('now', '+5 days'),
             'expired_at' => $this->faker->dateTimeBetween('now', '+1 week'),
+            'status' => $this->faker->randomElement(['reserved', 'canceled', 'expired', 'borrowed']),
         ];
     }
 }

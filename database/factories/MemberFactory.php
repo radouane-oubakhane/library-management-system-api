@@ -25,6 +25,7 @@ class MemberFactory extends Factory
             'date_of_birth' => $this->faker->date,
             'membership_start_date' => $this->faker->date,
             'membership_end_date' => $this->faker->date,
+            'picture' => $this->faker->imageUrl,
         ];
     }
 }

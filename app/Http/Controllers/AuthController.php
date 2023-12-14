@@ -15,11 +15,11 @@ class AuthController extends Controller
             'name'=>['required','string','max:255'],
             'email'=>['required','string','email','max:255','unique:users'],
             'password'=>['required','string','min:8','confirmed'],
-            'role'=>['required','string','max:255', 'in:admin,member']
         ]);
 
         $validatedData['password'] = bcrypt($request->password);
-        $user = User::create($validatedData);
+
+        $user = User::create($validatedData + ['is_admin'=>false]);
 
         $accessToken = $user->createToken('authToken : '.$user->email)->plainTextToken;
 
@@ -27,7 +27,7 @@ class AuthController extends Controller
             id: $user->id,
             name: $user->name,
             email: $user->email,
-            role: $user->role,
+            is_admin: $user->is_admin,
         );
 
         return response()->json(['user'=>$userResponse,'access_token'=>$accessToken],201);
@@ -51,7 +51,7 @@ class AuthController extends Controller
             id: auth()->user()->id,
             name: auth()->user()->name,
             email: auth()->user()->email,
-            role: auth()->user()->role,
+            is_admin: auth()->user()->is_admin,
         );
 
         return response()->json(['user'=>$userResponse,'access_token'=>$accessToken]);

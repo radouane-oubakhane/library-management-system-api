@@ -17,6 +17,7 @@ class Author extends Model
         'phone',
         'address',
         'date_of_birth',
+        'picture',
     ];
 
     public function books(): HasMany
