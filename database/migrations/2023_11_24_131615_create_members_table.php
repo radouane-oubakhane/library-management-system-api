@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('membership_start_date');
             $table->string('membership_end_date');
             $table->string('picture')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

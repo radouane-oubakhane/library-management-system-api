@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('date_of_birth');
             $table->string('picture')->nullable();
+            $table->string('password')->nullable();
+            $table->enum('status', ['accepted', 'pending', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

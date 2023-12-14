@@ -40,6 +40,8 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 
 Route::prefix('inscriptions')->group(function () {
+    Route::get('/', [InscriptionController::class, 'index'])->name('inscriptions.index');
+
     Route::post('/', [InscriptionController::class, 'store'])->name('inscriptions.store');
 });
 
@@ -71,7 +73,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 
     // Inscriptions routes
     Route::prefix('inscriptions')->group(function () {
-        Route::get('/', [InscriptionController::class, 'index'])->name('inscriptions.index');
+        // Route::get('/', [InscriptionController::class, 'index'])->name('inscriptions.index');
         Route::get('/{id}', [InscriptionController::class, 'show'])->name('inscriptions.show');
         // Route::post('/', [InscriptionController::class, 'store'])->name('inscriptions.store');
         Route::put('/{id}', [InscriptionController::class, 'update'])->name('inscriptions.update');
