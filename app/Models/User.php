@@ -20,7 +20,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         'is_admin',
@@ -47,7 +46,7 @@ class User extends Authenticatable
     ];
 
 
-    public function members(): BelongsTo
+    public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);
     }

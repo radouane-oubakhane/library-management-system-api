@@ -12,7 +12,6 @@ class AuthController extends Controller
     public function register(Request $request): JsonResponse
     {
         $validatedData = $request->validate([
-            'name'=>['required','string','max:255'],
             'email'=>['required','string','email','max:255','unique:users'],
             'password'=>['required','string','min:8','confirmed'],
         ]);
@@ -25,7 +24,6 @@ class AuthController extends Controller
 
         $userResponse = new UserResponse(
             id: $user->id,
-            name: $user->name,
             email: $user->email,
             is_admin: $user->is_admin,
         );
@@ -49,7 +47,6 @@ class AuthController extends Controller
 
         $userResponse = new UserResponse(
             id: auth()->user()->id,
-            name: auth()->user()->name,
             email: auth()->user()->email,
             is_admin: auth()->user()->is_admin,
         );
