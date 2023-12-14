@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\DTO\inscription\InscriptionResponse;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Models\Inscription;
+use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use function Laravel\Prompts\password;
 
 class InscriptionController extends Controller
 {
@@ -57,21 +61,21 @@ class InscriptionController extends Controller
     {
 
         try {
-            $request->validate([
+            $validatedData = $request->validate([
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'email' => 'required|email|unique:inscriptions',
                 'phone' => 'required|string',
                 'address' => 'required|string',
                 'date_of_birth' => 'required|date',
-                'password' => 'required|string',
+                'password' => 'required|string|min:8',
+                'picture' => 'required|string',
             ]);
 
-            $request->merge([
-                'status' => 'pending'
-            ]);
+            $validatedData['password'] = bcrypt($request->password);
+            $validatedData['status'] = 'pending';
 
-            $inscription = Inscription::create($request->all());
+            $inscription = Inscription::create($validatedData);
 
             $inscriptionResponse = new InscriptionResponse(
                 $inscription->id,
@@ -154,7 +158,8 @@ class InscriptionController extends Controller
                 'address' => 'sometimes|required|string',
                 'date_of_birth' => 'sometimes|required|date',
                 'status' => 'sometimes|required|string',
-                'password' => 'sometimes|required|string',
+                'password' => 'sometimes|required|string|min:8',
+                'picture' => 'sometimes|required|string',
             ]);
 
             $inscription = Inscription::find($id);
@@ -230,12 +235,40 @@ class InscriptionController extends Controller
                 ], 404);
             }
 
+            if ($inscription->status === 'accepted') {
+                return response()->json([
+                    'message' => 'Inscription already accepted'
+                ], 400);
+            }
+
+            // start transaction
+            DB::beginTransaction();
+
             $inscription->update([
                 'status' => 'accepted'
             ]);
 
-            // $user = new RegisterController();
-            // $user->create($inscription);
+            $user = User::create([
+                'email' => $inscription->email,
+                'password' => $inscription->password,
+                'is_admin' => false,
+            ]);
+
+            Member::create([
+                'user_id' => $user->id,
+                'first_name' => $inscription->first_name,
+                'last_name' => $inscription->last_name,
+                'email' => $inscription->email,
+                'phone' => $inscription->phone,
+                'address' => $inscription->address,
+                'date_of_birth' => $inscription->date_of_birth,
+                'membership_start_date' => now(),
+                'membership_end_date' => now()->addYear(),
+                'picture' => $inscription->picture,
+            ]);
+
+            // commit transaction
+            DB::commit();
 
             $inscriptionResponse = new InscriptionResponse(
                 $inscription->id,
@@ -252,6 +285,9 @@ class InscriptionController extends Controller
             return response()->json($inscriptionResponse, 200);
 
         } catch (\Throwable $th) {
+            // rollback transaction
+            DB::rollBack();
+
             return response()->json([
                 'message' => 'Error while accepting inscription',
                 'error' => $th->getMessage()
@@ -296,3 +332,5 @@ class InscriptionController extends Controller
         }
     }
 }
+
+
