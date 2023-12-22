@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DTO\user\UserResponse;
+use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -20,12 +22,18 @@ class AuthController extends Controller
 
         $user = User::create($validatedData + ['is_admin'=>false]);
 
+        $member = Member::where('user_id', Auth::user()->id)->first();
+
         $accessToken = $user->createToken('authToken : '.$user->email)->plainTextToken;
 
         $userResponse = new UserResponse(
             id: $user->id,
             email: $user->email,
             is_admin: $user->is_admin,
+            first_name: $member->first_name,
+            last_name: $member->last_name,
+            picture: $member->picture,
+            member_id: $member->id,
         );
 
         return response()->json(['user'=>$userResponse,'access_token'=>$accessToken],201);
@@ -45,10 +53,16 @@ class AuthController extends Controller
 
         $accessToken = auth()->user()->createToken('authToken : '.auth()->user()->email)->plainTextToken;
 
+        $member = Member::where('user_id', Auth::user()->id)->first();
+
         $userResponse = new UserResponse(
             id: auth()->user()->id,
             email: auth()->user()->email,
             is_admin: auth()->user()->is_admin,
+            first_name: $member->first_name,
+            last_name: $member->last_name,
+            picture: $member->picture,
+            member_id: $member->id,
         );
 
         return response()->json(['user'=>$userResponse,'access_token'=>$accessToken]);

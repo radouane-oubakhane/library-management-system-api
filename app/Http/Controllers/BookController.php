@@ -27,7 +27,8 @@ class BookController extends Controller
                     new BookCategoryResponse(
                         $book->bookCategory->id,
                         $book->bookCategory->name,
-                        $book->bookCategory->description,),
+                        $book->bookCategory->description,
+                        $book->bookCategory->picture,),
                     $book->isbn,
                     $book->description,
                     $book->stock,
@@ -89,7 +90,8 @@ class BookController extends Controller
                 new BookCategoryResponse(
                     $book->bookCategory->id,
                     $book->bookCategory->name,
-                    $book->bookCategory->description,),
+                    $book->bookCategory->description,
+                    $book->bookCategory->picture,),
                 $book->isbn,
                 $book->description,
                 $book->stock,
@@ -132,7 +134,8 @@ class BookController extends Controller
                 new BookCategoryResponse(
                     $book->bookCategory->id,
                     $book->bookCategory->name,
-                    $book->bookCategory->description,),
+                    $book->bookCategory->description,
+                    $book->bookCategory->picture,),
                 $book->isbn,
                 $book->description,
                 $book->stock,
@@ -199,7 +202,8 @@ class BookController extends Controller
                 new BookCategoryResponse(
                     $book->bookCategory->id,
                     $book->bookCategory->name,
-                    $book->bookCategory->description,),
+                    $book->bookCategory->description,
+                    $book->bookCategory->picture,),
                 $book->isbn,
                 $book->description,
                 $book->stock,

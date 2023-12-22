@@ -56,6 +56,7 @@ class ProfileController extends Controller
                                 $reservation->book->bookCategory->id,
                                 $reservation->book->bookCategory->name,
                                 $reservation->book->bookCategory->description,
+                                $reservation->book->bookCategory->picture,
                             ),
                             $reservation->book->isbn,
                             $reservation->book->description,
@@ -71,7 +72,7 @@ class ProfileController extends Controller
                         $reservation->expired_at,
                         $reservation->status,
                     );
-                })->toArray(),
+                })->toArray() ?? [],
                 $borrows->map(function ($borrow) {
                     return new MemberProfileBorrowResponse(
                         $borrow->id,
@@ -84,6 +85,7 @@ class ProfileController extends Controller
                                 $borrow->book->bookCategory->id,
                                 $borrow->book->bookCategory->name,
                                 $borrow->book->bookCategory->description,
+                                $borrow->book->bookCategory->picture,
                             ),
                             $borrow->book->isbn,
                             $borrow->book->description,
@@ -99,7 +101,7 @@ class ProfileController extends Controller
                         $borrow->return_date,
                         $borrow->status,
                     );
-                })->toArray(),
+                })->toArray() ?? [],
             );
 
             return response()->json($memberProfileResponse, 200);

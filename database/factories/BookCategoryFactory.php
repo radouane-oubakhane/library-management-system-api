@@ -19,6 +19,7 @@ class BookCategoryFactory extends Factory
         return [
             'name' => $this->faker->word,
             'description' => $this->faker->sentence,
+            'picture' => $this->faker->imageUrl(),
         ];
     }
 }

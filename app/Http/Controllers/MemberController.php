@@ -38,7 +38,9 @@ class MemberController extends Controller
                    $member->date_of_birth,
                    $member->membership_start_date,
                    $member->membership_end_date,
-                   $member->user->picture,
+                   $member->picture,
+                   $member->reservations->count(),
+                   $member->borrows->count(),
                );
            });
 
@@ -100,6 +102,8 @@ class MemberController extends Controller
                 $member->membership_start_date,
                 $member->membership_end_date,
                 $member->picture,
+                $member->reservations->count(),
+                $member->borrows->count(),
             );
 
             return response()->json($memberResponse, 201);
@@ -138,6 +142,8 @@ class MemberController extends Controller
                 $member->membership_start_date,
                 $member->membership_end_date,
                 $member->picture,
+                $member->reservations->count(),
+                $member->borrows->count(),
             );
 
             return response()->json($memberResponse, 200);
@@ -198,6 +204,8 @@ class MemberController extends Controller
                 $member->membership_start_date,
                 $member->membership_end_date,
                 $member->picture,
+                $member->reservations->count(),
+                $member->borrows->count(),
             );
 
             return response()->json($memberResponse, 200);

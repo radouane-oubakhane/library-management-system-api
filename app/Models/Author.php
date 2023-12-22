@@ -17,6 +17,7 @@ class Author extends Model
         'phone',
         'address',
         'date_of_birth',
+        'biography',
         'picture',
     ];
 

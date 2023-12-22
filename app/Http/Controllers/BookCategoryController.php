@@ -23,6 +23,7 @@ class BookCategoryController extends Controller
                     $category->id,
                     $category->name,
                     $category->description,
+                    $category->picture,
                 );
             })->toArray();
 
@@ -52,6 +53,8 @@ class BookCategoryController extends Controller
         try {
             $request->validate([
                 'name' => 'required|string',
+                'description' => 'required|string',
+                'picture' => 'required|string',
             ]);
 
 
@@ -61,6 +64,7 @@ class BookCategoryController extends Controller
                 $category->id,
                 $category->name,
                 $category->description,
+                $category->picture,
             );
 
 
@@ -93,6 +97,7 @@ class BookCategoryController extends Controller
                 $category->id,
                 $category->name,
                 $category->description,
+                $category->picture,
             );
 
             return response()->json($categoryResponse, 200);
@@ -121,7 +126,9 @@ class BookCategoryController extends Controller
         try {
 
             $request->validate([
-                'name' => 'sometimes|required|string',
+                'name' => 'sometimes|string',
+                'description' => 'sometimes|string',
+                'picture' => 'sometimes|string',
             ]);
 
             $category = BookCategory::findOrFail($id);
@@ -138,6 +145,7 @@ class BookCategoryController extends Controller
                 $category->id,
                 $category->name,
                 $category->description,
+                $category->picture,
             );
 
             return response()->json($categoryResponse, 200);
@@ -163,6 +171,8 @@ class BookCategoryController extends Controller
                     'message' => 'Category not found',
                 ], 404);
             }
+
+            $category->books()->detach();
 
             $category->delete();
 

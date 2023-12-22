@@ -13,6 +13,7 @@ class BookCategory extends Model
     protected $fillable = [
         'name',
         'description',
+        'picture',
     ];
 
     public function books(): HasMany

@@ -40,8 +40,6 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 
 Route::prefix('inscriptions')->group(function () {
-    Route::get('/', [InscriptionController::class, 'index'])->name('inscriptions.index');
-
     Route::post('/', [InscriptionController::class, 'store'])->name('inscriptions.store');
 });
 
@@ -62,6 +60,7 @@ Route::prefix('authors')->group(function () {
 Route::prefix('categories')->group(function () {
     Route::get('/', [BookCategoryController::class, 'index'])->name('book-categories.index');
     Route::get('/{id}', [BookCategoryController::class, 'show'])->name('book-categories.show');
+    Route::get('/{id}/books', [BookCategoryController::class, 'books'])->name('book-categories.books');
 });
 
 
@@ -73,7 +72,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 
     // Inscriptions routes
     Route::prefix('inscriptions')->group(function () {
-        // Route::get('/', [InscriptionController::class, 'index'])->name('inscriptions.index');
+        Route::get('/', [InscriptionController::class, 'index'])->name('inscriptions.index');
         Route::get('/{id}', [InscriptionController::class, 'show'])->name('inscriptions.show');
         // Route::post('/', [InscriptionController::class, 'store'])->name('inscriptions.store');
         Route::put('/{id}', [InscriptionController::class, 'update'])->name('inscriptions.update');
@@ -152,7 +151,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
     Route::prefix('reservations')->group(function () {
         Route::get('/', [ReservationController::class, 'index'])->name('reservations.index');
         Route::get('/{id}', [ReservationController::class, 'show'])->name('reservations.show');
-        Route::post('/', [ReservationController::class, 'store'])->name('reservations.store');
+        // Route::post('/', [ReservationController::class, 'store'])->name('reservations.store');
         Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
         Route::delete('/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
@@ -177,6 +176,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [ProfileController::class, 'profile'])->name('profile');
         Route::put('/', [ProfileController::class, 'updateProfile'])->name('profile.update');
         Route::delete('/', [ProfileController::class, 'destroyProfile'])->name('profile.destroy');
+    });
+
+    // Reservations routes
+    Route::prefix('reservations')->group(function () {
+        Route::post('/', [ReservationController::class, 'store'])->name('reservations.store');
     });
 
 

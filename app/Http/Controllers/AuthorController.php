@@ -28,6 +28,7 @@ class AuthorController extends Controller
                     $author->phone,
                     $author->address,
                     $author->date_of_birth,
+                    $author->biography,
                     $author->picture,
                 );
             });
@@ -65,6 +66,8 @@ class AuthorController extends Controller
                 'phone' => 'required|string',
                 'address' => 'required|string',
                 'date_of_birth' => 'required|date',
+                'biography' => 'required|string',
+                'picture' => 'required|string',
             ]);
 
             $author = Author::create($request->all());
@@ -77,6 +80,7 @@ class AuthorController extends Controller
                 $author->phone,
                 $author->address,
                 $author->date_of_birth,
+                $author->biography,
                 $author->picture,
             );
 
@@ -114,6 +118,7 @@ class AuthorController extends Controller
                 $author->phone,
                 $author->address,
                 $author->date_of_birth,
+                $author->biography,
                 $author->picture,
             );
 
@@ -143,12 +148,15 @@ class AuthorController extends Controller
         try {
 
             $request->validate([
-                'first_name' => 'sometimes|required|string',
-                'last_name' => 'sometimes|required|string',
-                'email' => 'sometimes|required|email',
-                'phone' => 'sometimes|required|string',
-                'address' => 'sometimes|required|string',
-                'date_of_birth' => 'sometimes|required|date',
+                'first_name' => 'sometimes|string',
+                'last_name' => 'sometimes|string',
+                'email' => 'sometimes|email',
+                'phone' => 'sometimes|string',
+                'address' => 'sometimes|string',
+                'date_of_birth' => 'sometimes|date',
+                'biography' => 'sometimes|string',
+                'picture' => 'sometimes|string',
+
             ]);
 
             $author = Author::findOrFail($id);
@@ -169,6 +177,7 @@ class AuthorController extends Controller
                 $author->phone,
                 $author->address,
                 $author->date_of_birth,
+                $author->biography,
                 $author->picture,
             );
 
@@ -198,9 +207,9 @@ class AuthorController extends Controller
 
             $books = $author->books;
 
-            $books->map(function ($book) {
-                $book->author_id = null;
-            });
+            foreach ($books as $book) {
+                $book->delete();
+            }
 
             $author->delete();
 
@@ -234,7 +243,8 @@ class AuthorController extends Controller
                     new AuthorCategoryResponse(
                         $book->bookCategory->id,
                         $book->bookCategory->name,
-                        $book->bookCategory->description,),
+                        $book->bookCategory->description,
+                        $book->bookCategory->picture,),
                     $book->isbn,
                     $book->description,
                     $book->stock,

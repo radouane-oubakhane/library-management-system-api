@@ -16,6 +16,8 @@ class MemberResponse
         public string $membership_start_date,
         public string $membership_end_date,
         public string $picture,
+        public int $reservations_count,
+        public int $borrows_count,
     ) {
     }
 
