@@ -96,8 +96,10 @@ class ReservationController extends Controller
                 'expired_at' => 'nullable|date',
             ]);
 
+
             $request->merge([
-                'status' => 'reserved'
+                'status' => 'reserved',
+                'expired_at' => now()->addDays(3)
             ]);
 
             $reservation = Reservation::create($request->all());
@@ -392,8 +394,13 @@ class ReservationController extends Controller
         }
     }
 
-    public function borrow(string $id): JsonResponse
+    public function borrow(Request $request, string $id): JsonResponse
     {
+        $request->validate([
+            'return_date' => 'nullable|date',
+        ]);
+
+
         try {
             $reservation = Reservation::find($id);
 
@@ -406,6 +413,23 @@ class ReservationController extends Controller
             $reservation->update([
                 'status' => 'borrowed',
                 'canceled_at' => null
+            ]);
+
+            // find a copy of the book
+            $bookCopy = $reservation->book->bookCopies()->where('status', 'available')->first();
+
+            // update the book copy status
+            $bookCopy->update([
+                'status' => 'borrowed'
+            ]);
+
+            // update borrows table
+            $bookCopy->borrows()->create([
+                'member_id' => $reservation->member_id,
+                'book_id' => $reservation->book_id,
+                'borrow_date' => now(),
+                'return_date' => $request->return_date,
+                'status' => 'borrowed'
             ]);
 
             $reservationResponse = new ReservationResponse(

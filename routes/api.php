@@ -153,7 +153,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         Route::get('/{id}', [ReservationController::class, 'show'])->name('reservations.show');
         // Route::post('/', [ReservationController::class, 'store'])->name('reservations.store');
         Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
-        Route::delete('/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+        // Route::delete('/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
         Route::put('/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservations.cancel');
         Route::put('/{id}/borrow', [ReservationController::class, 'borrow'])->name('reservations.borrow');
@@ -181,6 +181,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Reservations routes
     Route::prefix('reservations')->group(function () {
         Route::post('/', [ReservationController::class, 'store'])->name('reservations.store');
+        Route::delete('/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+
     });
 
 

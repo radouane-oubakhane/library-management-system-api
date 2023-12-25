@@ -141,10 +141,10 @@ class ProfileController extends Controller
                         $inscription->phone,
                         $inscription->address,
                         $inscription->date_of_birth,
-                        $inscription->picture,
                         $inscription->status,
+                        $inscription->picture,
                     );
-                })->toArray(),
+                })->toArray() ?? [],
                 new AdminProfileDashboardDataResponse(
                     $books_count,
                     $authors_count,

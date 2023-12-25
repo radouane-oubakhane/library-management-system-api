@@ -54,11 +54,25 @@ class BookCategoryController extends Controller
             $request->validate([
                 'name' => 'required|string',
                 'description' => 'required|string',
-                'picture' => 'required|string',
+                'picture' => 'required|image',
             ]);
 
 
+
+            $file = $request->file('picture');
+            $fileName = $this->str_slug($request->name) . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/categories', $fileName);
+            $request->picture = $fileName;
+
             $category = BookCategory::create($request->all());
+
+
+            $category->update([
+                'picture' =>  $fileName
+            ]);
+
+
+            $category->save();
 
             $categoryResponse = new CategoryResponse(
                 $category->id,
@@ -128,7 +142,7 @@ class BookCategoryController extends Controller
             $request->validate([
                 'name' => 'sometimes|string',
                 'description' => 'sometimes|string',
-                'picture' => 'sometimes|string',
+                'picture' => 'sometimes|image',
             ]);
 
             $category = BookCategory::findOrFail($id);
@@ -139,7 +153,14 @@ class BookCategoryController extends Controller
                 ], 404);
             }
 
+
+
             $category->update($request->all());
+
+
+
+            $category->save();
+
 
             $categoryResponse = new CategoryResponse(
                 $category->id,
@@ -172,9 +193,37 @@ class BookCategoryController extends Controller
                 ], 404);
             }
 
-            $category->books()->detach();
+
+
+            $books = $category->books;
+
+
+            $books->each(function ($book) {
+                $book->bookCopies()->delete();
+            });
+
+            $books->each(function ($book) {
+                $book->reservations()->delete();
+            });
+
+            $books->each(function ($book) {
+                $book->borrows()->delete();
+            });
+
+            $books->each(function ($book) {
+                $book->delete();
+            });
 
             $category->delete();
+
+            // delete image
+            $image_path = public_path().'/storage/categories/'.$category->picture;
+
+            if (file_exists($image_path)) {
+                unlink($image_path);
+            }
+
+
 
             return response()->json(null, 204);
 
@@ -222,6 +271,11 @@ class BookCategoryController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    private function str_slug(mixed $name)
+    {
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
     }
 
 }

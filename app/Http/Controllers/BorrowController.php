@@ -392,6 +392,7 @@ class BorrowController extends Controller
            try {
                 $borrow = Borrow::findOrFail($id);
                 $borrow->status = 'returned';
+                $borrow->return_date = now();
                 $borrow->save();
 
                 $book_copy = BookCopy::findOrFail($borrow->book_copy_id);
