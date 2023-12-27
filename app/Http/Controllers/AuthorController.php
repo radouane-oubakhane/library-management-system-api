@@ -67,10 +67,25 @@ class AuthorController extends Controller
                 'address' => 'required|string',
                 'date_of_birth' => 'required|date',
                 'biography' => 'required|string',
-                'picture' => 'required|string',
+                'picture' => 'required|image',
             ]);
 
+
+            $file = $request->file('picture');
+            $fileName = $this->str_slug($request->last_name) . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/authors', $fileName);
+            $request->picture = $fileName;
+
+
+
             $author = Author::create($request->all());
+
+            $author->update([
+                'picture' =>  $fileName
+            ]);
+
+
+            $author->save();
 
             $authorResponse = new AuthorResponse(
                 $author->id,
@@ -213,6 +228,13 @@ class AuthorController extends Controller
 
             $author->delete();
 
+            // delete old image
+            $image_path = public_path().'/storage/authors/'.$author->picture;
+
+            if (file_exists($image_path)) {
+                unlink($image_path);
+            }
+
             return response()->json(null, 204);
 
         } catch (\Throwable $th) {
@@ -263,6 +285,79 @@ class AuthorController extends Controller
             return response()->json([
                 'message' => 'Error while getting author books',
                 'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    private function str_slug(mixed $name)
+    {
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function updateImage(Request $request, string $id):JsonResponse
+    {
+        try {
+            $request->validate([
+                'picture' => 'sometimes|image',
+            ]);
+
+
+
+            $author = Author::findOrFail($id);
+
+            if (!$author) {
+                return response()->json([
+                    'message' => 'Category not found',
+                ], 404);
+            }
+
+            if ($request->hasFile('picture')) {
+
+                // delete old image
+                $image_path = public_path().'/storage/authors/'.$author->picture;
+
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+
+                // upload new image
+                $file = $request->file('picture');
+                $fileName = $this->str_slug($author->last_name) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/authors', $fileName);
+
+
+
+                $request->picture = $fileName;
+
+                $author->update([
+                    'picture' =>  $fileName
+                ]);
+
+                $author->save();
+
+
+
+            }
+
+            return response()->json("Image updated", 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error while updating category image',
+                'error' => $e->getMessage()
             ], 500);
         }
     }

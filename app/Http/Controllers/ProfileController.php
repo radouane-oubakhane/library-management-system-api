@@ -107,7 +107,8 @@ class ProfileController extends Controller
             return response()->json($memberProfileResponse, 200);
 
 
-        } elseif (Auth::user()->is_admin) {
+        } elseif (Auth::user()->is_admin)
+        {
             $member = Member::where('user_id', Auth::user()->id)->first();
 
             $inscriptions = Inscription::where('status', 'pending')->get();
@@ -172,17 +173,17 @@ class ProfileController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'email' => 'sometimes|required|email',
-                'password' => 'sometimes|required|string',
+                'email' => 'sometimes|email',
+                'password' => 'sometimes|string',
 
-                'first_name' => 'sometimes|required|string',
-                'last_name' => 'sometimes|required|string',
-                'phone' => 'sometimes|required|string',
-                'address' => 'sometimes|required|string',
-                'date_of_birth' => 'sometimes|required|date',
-                'membership_start_date' => 'sometimes|required|date',
-                'membership_end_date' => 'sometimes|required|date',
-                'picture' => 'sometimes|required|string',
+                'first_name' => 'sometimes|string',
+                'last_name' => 'sometimes|string',
+                'phone' => 'sometimes|string',
+                'address' => 'sometimes|string',
+                'date_of_birth' => 'sometimes|date',
+                'membership_start_date' => 'sometimes|date',
+                'membership_end_date' => 'sometimes|date',
+                'picture' => 'sometimes|image',
             ]);
 
 
@@ -245,6 +246,64 @@ class ProfileController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error while deleting profile', 'error' => $th->getMessage()], 500);
         }
+    }
+
+
+    public function updateImage(Request $request): JsonResponse
+    {
+        try {
+            $validatedData = $request->validate([
+                'picture' => 'required|image',
+            ]);
+
+            $member = Member::where('user_id', Auth::user()->id)->first();
+
+            if (!$member) {
+                return response()->json(['message' => 'Member not found'], 404);
+            }
+
+            if ($request->hasFile('picture')) {
+                // delete old image
+                $image_path = public_path().'/storage/members/'.$member->picture;
+
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+
+                // upload new image
+                $file = $request->file('picture');
+                $fileName = $this->str_slug($member->first_name) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/members', $fileName);
+
+                $validatedData['picture'] = $fileName;
+
+                $member->update($validatedData);
+
+            }
+
+            $profileResponse = new ProfileResponse(
+                $member->id,
+                $member->first_name,
+                $member->last_name,
+                $member->email,
+                $member->phone,
+                $member->address,
+                $member->date_of_birth,
+                $member->membership_start_date,
+                $member->membership_end_date,
+                $member->picture,
+            );
+
+            return response()->json($profileResponse, 200);
+
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Error while updating profile image', 'error' => $th->getMessage()], 500);
+        }
+    }
+
+    private function str_slug(mixed $name)
+    {
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
     }
 }
 

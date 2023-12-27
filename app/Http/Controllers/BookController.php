@@ -78,9 +78,24 @@ class BookController extends Controller
                 'published_at' => 'required|date',
                 'language' => 'required|string',
                 'edition' => 'required|string',
+                'picture' => 'required|image',
             ]);
 
+            if ($request->hasFile('picture')) {
+                $file = $request->file('picture');
+                $fileName = $this->str_slug($request->title) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/books', $fileName);
+                $request->picture = $fileName;
+            }
+
+
+
             $book = Book::create($request->all());
+
+
+            $book->update([
+                'picture' =>  $fileName
+            ]);
 
             $bookResponse = new BookResponse(
                 $book->id,
@@ -263,5 +278,63 @@ class BookController extends Controller
                 'error' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function updateImage(Request $request, string $id): JsonResponse
+    {
+        try {
+
+            $request->validate([
+                'picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            $book = Book::findOrFail($id);
+
+            if (!$book) {
+                return response()->json([
+                    'message' => 'Book not found',
+                ], 404);
+            }
+
+            if ($request->hasFile('picture')) {
+
+                // delete old picture
+                $image_path = public_path().'/storage/books/'.$book->picture;
+
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+
+
+                $file = $request->file('picture');
+                $fileName = $this->str_slug($book->title) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/books', $fileName);
+                $book->picture = $fileName;
+
+
+                $book->update([
+                    'picture' => $fileName
+                ]);
+
+                $book->save();
+            }
+
+            return response()->json([
+                'message' => 'Book image updated successfully',
+                'data' => $book
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error while updating book image',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+
+    private function str_slug(mixed $name)
+    {
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
     }
 }

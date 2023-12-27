@@ -88,6 +88,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         // Route::get('/{id}', [BookController::class, 'show'])->name('books.show');
         Route::post('/', [BookController::class, 'store'])->name('books.store');
         Route::put('/{id}', [BookController::class, 'update'])->name('books.update');
+        Route::post('/{id}/picture', [BookController::class, 'updateImage'])->name('book-categories.update-image');
         Route::delete('/{id}', [BookController::class, 'destroy'])->name('books.destroy');
     });
 
@@ -97,6 +98,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         // Route::get('/{id}', [AuthorController::class, 'show'])->name('authors.show');
         Route::post('/', [AuthorController::class, 'store'])->name('authors.store');
         Route::put('/{id}', [AuthorController::class, 'update'])->name('authors.update');
+        Route::post('/{id}/picture', [AuthorController::class, 'updateImage'])->name('authors.update-image');
         Route::delete('/{id}', [AuthorController::class, 'destroy'])->name('authors.destroy');
 
         // Route::get('/{id}/books', [AuthorController::class, 'books'])->name('authors.books');
@@ -108,6 +110,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
         // Route::get('/{id}', [BookCategoryController::class, 'show'])->name('book-categories.show');
         Route::post('/', [BookCategoryController::class, 'store'])->name('book-categories.store');
         Route::put('/{id}', [BookCategoryController::class, 'update'])->name('book-categories.update');
+        Route::post('/{id}/picture', [BookCategoryController::class, 'updateImage'])->name('book-categories.update-image');
         Route::delete('/{id}', [BookCategoryController::class, 'destroy'])->name('book-categories.destroy');
 
         // Route::get('/{id}/books', [BookCategoryController::class, 'books'])->name('book-categories.books');
@@ -175,6 +178,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'profile'])->name('profile');
         Route::put('/', [ProfileController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/picture', [ProfileController::class, 'updateImage'])->name('profile.update-image');
         Route::delete('/', [ProfileController::class, 'destroyProfile'])->name('profile.destroy');
     });
 

@@ -69,13 +69,26 @@ class InscriptionController extends Controller
                 'address' => 'required|string',
                 'date_of_birth' => 'required|date',
                 'password' => 'required|string|min:8',
-                'picture' => 'required|string',
+                'picture' => 'required|image',
             ]);
+
+            if ($request->hasFile('picture')) {
+                $file = $request->file('picture');
+                $fileName = $this->str_slug($request->first_name . ' ' . $request->last_name) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/inscriptions', $fileName);
+                $validatedData['picture'] = $fileName;
+            }
 
             $validatedData['password'] = bcrypt($request->password);
             $validatedData['status'] = 'pending';
 
             $inscription = Inscription::create($validatedData);
+
+            $inscription->update([
+                'picture' => $fileName
+            ]);
+
+
 
             $inscriptionResponse = new InscriptionResponse(
                 $inscription->id,
@@ -267,6 +280,12 @@ class InscriptionController extends Controller
                 'picture' => $inscription->picture,
             ]);
 
+            // copy picture from inscriptions to members
+            $oldPath = public_path().'/storage/inscriptions/'.$inscription->picture;
+            $newPath = public_path().'/storage/members/'.$inscription->picture;
+            copy($oldPath, $newPath);
+
+
             // commit transaction
             DB::commit();
 
@@ -330,6 +349,10 @@ class InscriptionController extends Controller
                 'error' => $th->getMessage()
             ], 500);
         }
+    }
+    private function str_slug(mixed $name)
+    {
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
     }
 }
 

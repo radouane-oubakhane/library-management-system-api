@@ -142,7 +142,6 @@ class BookCategoryController extends Controller
             $request->validate([
                 'name' => 'sometimes|string',
                 'description' => 'sometimes|string',
-                'picture' => 'sometimes|image',
             ]);
 
             $category = BookCategory::findOrFail($id);
@@ -154,10 +153,7 @@ class BookCategoryController extends Controller
             }
 
 
-
             $category->update($request->all());
-
-
 
             $category->save();
 
@@ -276,6 +272,61 @@ class BookCategoryController extends Controller
     private function str_slug(mixed $name)
     {
         return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name)));
+    }
+
+    public function updateImage(Request $request, string $id):JsonResponse
+    {
+        try {
+            $request->validate([
+                'picture' => 'sometimes|image',
+            ]);
+
+
+
+            $category = BookCategory::findOrFail($id);
+
+            if (!$category) {
+                return response()->json([
+                    'message' => 'Category not found',
+                ], 404);
+            }
+
+            if ($request->hasFile('picture')) {
+
+                // delete old image
+                $image_path = public_path().'/storage/categories/'.$category->picture;
+
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+
+                // upload new image
+                $file = $request->file('picture');
+                $fileName = $this->str_slug($category->name) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/categories', $fileName);
+
+
+
+                $request->picture = $fileName;
+
+                $category->update([
+                    'picture' =>  $fileName
+                ]);
+
+                $category->save();
+
+
+
+            }
+
+            return response()->json("Image updated", 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error while updating category image',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
 }

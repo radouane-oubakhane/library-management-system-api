@@ -410,18 +410,30 @@ class ReservationController extends Controller
                 ], 404);
             }
 
+
+
+            // find a copy of the book
+            $bookCopy = $reservation->book->bookCopies()->where('status', 'available')->first();
+
+            // if no copy is available
+            if (!$bookCopy) {
+                return response()->json([
+                    'message' => 'No copy of the book is available'
+                ], 404);
+            }
+
+
             $reservation->update([
                 'status' => 'borrowed',
                 'canceled_at' => null
             ]);
 
-            // find a copy of the book
-            $bookCopy = $reservation->book->bookCopies()->where('status', 'available')->first();
-
             // update the book copy status
             $bookCopy->update([
                 'status' => 'borrowed'
             ]);
+
+
 
             // update borrows table
             $bookCopy->borrows()->create([
