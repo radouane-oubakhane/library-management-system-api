@@ -97,6 +97,16 @@ class BookController extends Controller
                 'picture' =>  $fileName
             ]);
 
+
+            // create book 100 copies
+
+            for ($i = 0; $i < 100; $i++) {
+                $book->bookCopies()->create([
+                    'book_id' => $book->id,
+                    'status' => 'available'
+                ]);
+            }
+
             $bookResponse = new BookResponse(
                 $book->id,
                 $book->title,

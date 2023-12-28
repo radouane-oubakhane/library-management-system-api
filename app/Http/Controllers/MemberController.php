@@ -26,6 +26,8 @@ class MemberController extends Controller
        try {
            $members = Member::all();
 
+
+
            $membersResponse = $members->map(function ($member) {
                return new MemberResponse(
                    $member->user_id,

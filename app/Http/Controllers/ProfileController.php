@@ -183,7 +183,6 @@ class ProfileController extends Controller
                 'date_of_birth' => 'sometimes|date',
                 'membership_start_date' => 'sometimes|date',
                 'membership_end_date' => 'sometimes|date',
-                'picture' => 'sometimes|image',
             ]);
 
 
@@ -193,7 +192,12 @@ class ProfileController extends Controller
                 return response()->json(['message' => 'Member not found'], 404);
             }
 
-            $validatedData['password'] = bcrypt($request->password);
+
+            if ($request->has('password')) {
+                $validatedData['password'] = bcrypt($request->password);
+            }
+
+
 
             $member->update($validatedData);
 
